@@ -1,11 +1,12 @@
 const express = require('express');
-const router = express.Router();
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+
 const User = require('../models/User');
+const auth = require('../middleware/auth');
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const { generateToken } = require('../utils');
 
+const router = express.Router();
 router.post('/sign-in', async (req, res) => {
   const { username, password } = req.body || null;
 
@@ -22,7 +23,7 @@ router.post('/sign-in', async (req, res) => {
       return res.json({ message: 'Incorrect Password!' });
     }
 
-    const token = jwt.sign({ user: user._id }, JWT_SECRET);
+    const token = generateToken({ userId: user._id });
 
     res.json({
       token,
@@ -49,6 +50,10 @@ router.post('/sign-up', async (req, res) => {
     console.log(error);
     res.status(500).json({ message: 'Server error' });
   }
+});
+
+router.get('/profile', auth, (req, res) => {
+  res.send(req.user);
 });
 
 module.exports = router;
