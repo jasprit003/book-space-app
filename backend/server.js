@@ -4,6 +4,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+const usersRouter = require('./routes/user');
+
 const app = express();
 
 app.use(cors());
@@ -15,6 +17,8 @@ mongoose
   .connect(mongoURI)
   .then(() => console.log('MongoDB Connected'))
   .catch(() => console.error('MongoDB connection failed'));
+
+app.use('/api/v1/user', usersRouter);
 
 app.get('/', (req, res) => {
   res.send('API IS RUNNING');
