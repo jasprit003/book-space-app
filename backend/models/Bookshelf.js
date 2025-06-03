@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bookshelfSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
+    description: String,
     books: [
       {
         type: mongoose.Schema.Types.ObjectId,

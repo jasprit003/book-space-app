@@ -4,10 +4,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
-const Book = require('./models/Book');
-
-const usersRoutes = require('./routes/userRoutes');
+const userRoutes = require('./routes/userRoutes');
 const bookRoutes = require('./routes/bookRoutes');
+const bookshelvesRoutes = require('./routes/bookshelvesRoutes');
 
 const app = express();
 
@@ -22,8 +21,9 @@ mongoose
   .then(() => console.log('MongoDB Connected'))
   .catch(() => console.error('MongoDB connection failed'));
 
-app.use('/api/v1/user', usersRoutes);
-app.use('/api/v1/books', bookRoutes);
+app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/book', bookRoutes);
+app.use('/api/v1/bookshelves', bookshelvesRoutes);
 
 app.listen(PORT, () =>
   console.log(`server up and running on http://localhost:${PORT}`)

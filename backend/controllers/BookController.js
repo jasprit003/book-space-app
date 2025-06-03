@@ -1,5 +1,7 @@
 const axios = require('axios');
 
+const Book = require('../models/Book');
+
 async function searchBooks(req, res) {
   try {
     const { q } = req.query;
@@ -36,4 +38,24 @@ async function searchBooks(req, res) {
   }
 }
 
-module.exports = { searchBooks };
+async function addBook(req, res) {
+  try {
+    const book = req.body;
+
+    const existingBook = await Book.findOne({
+      googleBookId: book.googleBookId,
+    });
+
+    if (existingBook) {
+      return res.json({ message: 'Book already exists', book: existingBook });
+    }
+
+    const newBook = await Book.create(book);
+    res.status(201).json({ message: 'Book added successfully', book: newBook });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
+module.exports = { searchBooks, addBook };
